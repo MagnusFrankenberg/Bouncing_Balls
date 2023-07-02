@@ -9,12 +9,14 @@ public class DemoPanel extends JPanel implements Runnable {
 
     int FPS = 60;
     Scene scene;
+    public int dpWidth = 800;
+    public int dpHeight = 480;
 
     Thread demoThread;
     public Scene1 scene1 = new Scene1(this);
 
     public DemoPanel(){
-        this.setPreferredSize((new Dimension(800,400)));
+        this.setPreferredSize((new Dimension(dpWidth,dpHeight)));
         this.setBackground(new Color(50,50,50));
         this.setDoubleBuffered(true);
         setStartScene();

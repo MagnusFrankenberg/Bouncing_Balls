@@ -14,70 +14,63 @@ public class Ball {
     public int spriteCounter = 0;
     public int spriteNum = 0;
     int flashSpeed;
-    int xVelocity;
-    int yVelocity;
+    public float xSpeed;
+    public float ySpeed;
 
-    public int xPos;
-    public int yPos;
-
-    public int xDir = +1;
-    public int yDir = +1;
+    public float xPos;
+    public float yPos;
+    public float radius;
+    public float mass;
 
     DemoPanel dp;
     List<BufferedImage> myBall;
 
-    public void calculatePosition(){
-        int minY = 0;
-        int maxY = 430;
-        int minX = 0;
-        int maxX = 750;
+    int maxY;
+    int maxX;
 
-        if(yPos>maxY){
-            yDir=-1;
-            yVelocity=randomizeVelocity(yVelocity);
-            xVelocity=randomizeVelocity(xVelocity);
-        }
-        if(yPos<minY) {
-            yDir=+1;
-            yVelocity=randomizeVelocity(yVelocity);
-            xVelocity=randomizeVelocity(xVelocity);
-        }
-        if(xPos>maxX){
-            xDir=-1;
-            yVelocity=randomizeVelocity(yVelocity);
-            xVelocity=randomizeVelocity(xVelocity);
-        }
-        if(xPos<minX) {
-            xDir=+1;
-            yVelocity=randomizeVelocity(yVelocity);
-            xVelocity=randomizeVelocity(xVelocity);
-        }
-
-        xPos += xDir*xVelocity;
-        yPos += yDir*yVelocity;
-
-        collisionChecker.collisionChecker();
-
-    }
-
-    public int randomizeVelocity(int velocity){
-        int velocityNew = velocity + new Random().nextInt(-2,3);
-        velocityNew = Math.min(8, Math.max(3, velocityNew));
-        return velocityNew;
-    }
-
-
-
-    public Ball(CollisionChecker collisionChecker,DemoPanel dp, int x, int y, List<BufferedImage> myBall, int flashSpeed, int xVelocity,int yVelocity){
+    public Ball(CollisionChecker collisionChecker,DemoPanel dp, float xPos, float yPos,float radius, float speed, float angleInDegree, List<BufferedImage> myBall, int flashSpeed){
         this.collisionChecker = collisionChecker;
         this.dp = dp;
-        this.xPos = x;
-        this.yPos = y;
+        this.xPos = xPos+radius;
+        this.yPos = yPos+radius;
+        this.radius = radius;
+        this.xSpeed = (float)(speed * Math.cos(Math.toRadians(angleInDegree)));
+        this.ySpeed = (float)(-speed * (float)Math.sin(Math.toRadians(angleInDegree)));
         this.myBall = new ArrayList<>(myBall);
         this.flashSpeed = flashSpeed;
-        this.xVelocity = xVelocity;
-        this.yVelocity = yVelocity;
+        this.maxY = dp.dpHeight;
+        this.maxX = dp.dpWidth;
+        this.mass = radius/50;
     }
+
+
+    public void calculatePosition(){
+
+        if(yPos + radius > maxY){
+            yPos=maxY-radius;
+            ySpeed = - ySpeed;
+        }
+        if(yPos < radius) {
+            yPos=radius;
+            ySpeed = - ySpeed;
+        }
+        if(xPos + radius > maxX){
+            xPos=maxX-radius;
+            xSpeed = - xSpeed;
+        }
+        if(xPos < radius) {
+            xPos=radius;
+            xSpeed = - xSpeed;
+        }
+
+        xPos += xSpeed;
+        yPos += ySpeed;
+
+        // collisionChecker.collisionChecker();
+
+    }
+
+
 
     public void update(){
         spriteCounter++;
@@ -93,12 +86,10 @@ public class Ball {
 
 
 
-
-
     public void draw(Graphics2D g2){
         BufferedImage image = null;
 
         image = myBall.get(spriteNum);
-        g2.drawImage(image,xPos,yPos,48,48,null);
+        g2.drawImage(image,(int)(xPos-radius),(int)(yPos-radius),(int)(2*radius),(int)(2*radius),null);
     }
 }
