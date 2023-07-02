@@ -40,7 +40,7 @@ public class Ball {
         this.flashSpeed = flashSpeed;
         this.maxY = dp.dpHeight;
         this.maxX = dp.dpWidth;
-        this.mass = radius/50;
+        this.mass = radius*radius;
     }
 
 
