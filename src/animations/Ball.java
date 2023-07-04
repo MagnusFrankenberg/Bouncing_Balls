@@ -88,6 +88,8 @@ public class Ball {
 
     public void draw(Graphics2D g2){
         BufferedImage image = null;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
         image = myBall.get(spriteNum);
         g2.drawImage(image,(int)(xPos-radius),(int)(yPos-radius),(int)(2*radius),(int)(2*radius),null);
